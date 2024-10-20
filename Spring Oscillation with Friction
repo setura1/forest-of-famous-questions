@@ -1,0 +1,79 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 定数の定義
+m = 1.0   # 質量 (kg)
+k = 50.0  # バネ定数 (N/m)
+f = 2.0   # 摩擦力 (N)
+x0 = 4.0  # 初期位置 (m)
+
+# 摩擦力によるずれ量
+d = f / k  # 摩擦力によるずれ量
+T = 2 * np.pi * np.sqrt(m / k)  # 振動周期
+half_T = T / 2  # 半周期
+
+# 停止領域の定義 (グレーゾーン)
+D = 2 * f / k  # ばねの完全停止する領域
+
+# 振動の減少を繰り返してストップゾーンに入るまで計算
+def calculate_displacement_until_stop(x0, d, D):
+    a = [x0]  # 初期位置をリストに追加
+    i = 0
+    while abs(a[-1]) > D and i < 20:  # シミュレーション回数を20回に制限
+        new_a = -(a[i] - 2 * d)  # 振動の減少計算
+        a.append(new_a)
+        i += 1
+    return a
+
+# ストップゾーンまでの伸縮量リスト
+displacements = calculate_displacement_until_stop(x0, d, D)
+
+# ストップゾーンまでの振動回数を出力
+print(f"物体が完全に停止するまでの振動回数: {len(displacements) - 1} 回")
+
+# 以下は振動と停止領域のシミュレーション
+def calc_x(t, x0, d, T):
+    cycles = np.floor(t / (T / 2))  # 半周期ごとのカウント
+    x_t = (-1)**cycles * (x0 - 2 * d * cycles)  # 振動中心が交互に移動する
+    return x_t
+
+# 時間範囲の設定
+t_max = 10 * T  # 最大時間（10周期分）
+t = np.linspace(0, t_max, 1000)
+
+# 振動の座標を計算
+x_t = calc_x(t, x0, d, T)
+
+# 停止領域に達した回数をカウントする関数
+def count_stops(x_t, D):
+    count = 0
+    for x in x_t:
+        if abs(x) <= D:  # 停止領域に入るとカウント
+            count += 1
+    return count
+
+# 停止するまでの回数をカウント
+stops = count_stops(x_t, D)
+
+# プロット (英語)
+plt.figure(figsize=(10, 6))
+plt.plot(t, x_t, color='r', label='x(t)')
+
+# 停止領域 (グレーゾーン) を追加
+plt.fill_between(t, -D, D, color='gray', alpha=0.3, label='Stop Zone')
+
+# ラベルを英語で設定
+plt.xlabel('Time (s)', fontsize=14)
+plt.ylabel('Displacement (x)', fontsize=14)
+plt.title('Spring Oscillation with Friction', fontsize=16)
+plt.grid(True)
+plt.axhline(0, color='black', linewidth=0.5)
+plt.axvline(0, color='black', linewidth=0.5)
+plt.legend()
+
+# プロットを表示
+plt.show()
+
+# 結果の日本語表示
+print(f"振動ごとに減少する最大伸縮量: {2 * d} m")
+print(f"半周期の時間: {half_T} 秒")
