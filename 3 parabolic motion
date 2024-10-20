@@ -1,0 +1,45 @@
+import math
+
+# 定数
+g = 9.8  # 重力加速度 (m/s^2)
+
+# パラメータ
+h = 10.0  # 高さ (m)
+e = 0.8   # 反発係数
+theta = math.radians(45)  # 射出角度 (度 -> ラジアン変換)
+
+# (1) 初速度 v0 の計算
+v0 = math.sqrt(2 * g * h)
+print(f"初速度 v0: {v0:.2f} m/s")
+
+# (2) 斜面方向の速度成分
+v0_sin_theta = v0 * math.sin(theta)
+v0_cos_theta = v0 * math.cos(theta)
+print(f"斜面方向の速度成分 v0 sin(theta): {v0_sin_theta:.2f} m/s")
+print(f"斜面方向の速度成分 v0 cos(theta): {v0_cos_theta:.2f} m/s")
+
+# 衝突後の速度成分
+v0_sin_theta_after = math.sqrt(2 * g * h) * math.sin(theta)
+v0_cos_theta_after = e * math.sqrt(2 * g * h) * math.cos(theta)
+print(f"衝突後の速度成分 v0 sin(theta): {v0_sin_theta_after:.2f} m/s")
+print(f"衝突後の速度成分 v0 cos(theta): {v0_cos_theta_after:.2f} m/s")
+
+# (4) 時間 t1 の計算
+t1 = (2 * e * v0) / g * math.sqrt(2 * h / g)
+print(f"時間 t1: {t1:.2f} 秒")
+
+# (5) 時間 t2 の計算
+t2 = (2 * e * v0 * math.cos(theta)) / g
+print(f"時間 t2: {t2:.2f} 秒")
+
+# (6) 無限等比級数での時間 T の計算
+T = (2 * e * v0) / g * (1 / (1 - e))
+print(f"無限等比級数での時間 T: {T:.2f} 秒")
+
+# 結論：最小初速度 v0 の計算
+v0_min = math.sqrt((2 * g * h) / (1 - e)**2)
+print(f"最小初速度 v0: {v0_min:.2f} m/s")
+
+# OB の計算
+OB = (4 * e * h * math.sin(theta)) / (1 - e)**2
+print(f"OB の距離: {OB:.2f} m")
