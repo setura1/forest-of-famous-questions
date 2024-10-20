@@ -1,0 +1,42 @@
+import math
+
+# 定数
+g = 9.8  # 重力加速度 (m/s^2)
+
+# パラメータを定義 (e, 角度 theta, 壁との距離 l)
+e = 0.8  # 反発係数
+theta = math.radians(45)  # 射出角度（度 -> ラジアン変換）
+l = 10.0  # 壁との距離 (m)
+
+# (1) 高さ h1 の計算
+v0 = 20.0  # 初速度 (m/s)
+h1 = (v0**2 * math.sin(theta)**2) / (2 * g)
+print(f"高さ h1: {h1:.2f} m")
+
+# (2) 時間 t2 の計算
+t2 = (2 * v0 * math.sin(theta)) / g
+print(f"時間 t2: {t2:.2f} 秒")
+
+# (3) BCの計算
+bc = e * ((v0**2 * math.sin(2 * theta)) / g - l)
+print(f"BC の距離: {bc:.2f} m")
+
+# (4) 高さ h2 の計算
+h2 = ((e * v0 * math.sin(theta))**2) / (2 * g)
+print(f"高さ h2: {h2:.2f} m")
+
+# (5) 時間 t3 の計算
+t3 = (2 * e * v0 * math.sin(theta)) / g
+print(f"時間 t3: {t3:.2f} 秒")
+
+# OB の計算
+ob = (2 * e * v0**2 * math.sin(theta) * math.cos(theta)) / g
+print(f"OB の距離: {ob:.2f} m")
+
+# l の計算
+total_l = ob + bc
+print(f"全体の距離 l: {total_l:.2f} m")
+
+# 最小初速度 v0 の計算
+v0_min = math.sqrt((g * l) / (e * math.sin(2 * theta)))
+print(f"最小初速度 v0: {v0_min:.2f} m/s")
