@@ -1,0 +1,31 @@
+import math
+
+# 定数 g = 重力加速度
+g = 9.8  # m/s^2 (地球上の重力加速度)
+
+# パラメータを定義 (距離 a と高さ b, 初速度 v0, 角度 theta)
+a = 10.0  # 水平方向の距離 (m)
+b = 5.0   # 鉛直方向の高さ (m)
+theta = math.radians(45)  # 射出角度 (度 -> ラジアン)
+v0 = 20.0  # 初速度 (m/s)
+
+# 時間 t を計算 (水平方向の運動 t = a / (v0 * cos(theta)))
+t = a / (v0 * math.cos(theta))
+print(f"時間 t: {t:.2f} 秒")
+
+# 鉛直方向の運動 yP(t)
+yP = v0 * math.sin(theta) * t - (1/2) * g * t**2
+print(f"Pの鉛直方向の位置 yP: {yP:.2f} m")
+
+# Qの自由落下距離 yQ(t) (tに基づいて計算)
+yQ = b - (1/2) * g * t**2
+print(f"Qの鉛直方向の位置 yQ: {yQ:.2f} m")
+
+# 衝突条件より a * tan(theta) = b を計算
+tan_theta = b / a
+theta_collision = math.degrees(math.atan(tan_theta))  # 衝突角度 (度に変換)
+print(f"衝突するための角度 θ は {theta_collision:.2f} 度です。")
+
+# 最小初速度 v0 の計算 (v0 = sqrt(g * (a^2 + b^2) / (2b)))
+v0_min = math.sqrt((g * (a**2 + b**2)) / (2 * b))
+print(f"放物運動における最小初速度 v0 は {v0_min:.2f} m/s です。")
